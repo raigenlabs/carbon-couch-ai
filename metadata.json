@@ -1,0 +1,6 @@
+{
+  "name": "AI Carbon Footprint Coach",
+  "description": "Estimate your carbon footprint, get highly personalized, practical ways to reduce emissions, save money, and get sustainability coaching.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
