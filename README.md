@@ -230,19 +230,27 @@ This system helps users:
 
 ## 🏗️ Tech Stack
 
-* **Frontend**: HTML, CSS, JavaScript
-* **Visualization**: Chart.js
-* **AI Integration**: Google Gemini API
-* **Deployment**: Vercel / Netlify
+* **Frontend**: React 19, TypeScript, Tailwind CSS (v4), Lucide React Icons
+* **Backend**: Node.js, Express (custom full-stack server proxy)
+* **Build System**: Vite (client bundling) & Esbuild (server-side production compiler to CJS)
+* **AI Integration**: Google GenAI SDK (`@google/genai`) powered by `gemini-3.5-flash`
+* **Deployment**: Configured for unified full-stack containers on Google Cloud Run
 
 ---
 
 ## 🚀 Getting Started
 
-1. Clone the repository
-2. Add your Gemini API key
-3. Run the server
-4. Open the app in browser
+1. Clone or export the repository from AI Studio.
+2. In the project root, build and install dependencies:
+   ```bash
+   npm install
+   ```
+3. Set your `GEMINI_API_KEY` in your environment or a `.env` file.
+4. Launch the application in developer mode:
+   ```bash
+   npm run dev
+   ```
+5. Open your local browser environment to port `3000` (e.g., `http://localhost:3000`).
 
 ---
 
