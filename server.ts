@@ -30,7 +30,7 @@ function calculateLocalCarbon(data: {
   shopping_level: string;
   location: string;
 }) {
-  const dailyDist = Number(data.km) || 0;
+  const dailyDist = Math.max(0, Number(data.km) || 0);
   const daysPerMonth = 30;
   let transportFactor = 0;
   switch (data.transport_mode) {
@@ -43,8 +43,8 @@ function calculateLocalCarbon(data: {
   }
   const transportCO2 = Math.round(dailyDist * daysPerMonth * transportFactor);
 
-  const baseUnits = Number(data.units) || 0;
-  const acHours = Number(data.ac_hours) || 0;
+  const baseUnits = Math.max(0, Number(data.units) || 0);
+  const acHours = Math.max(0, Number(data.ac_hours) || 0);
   // A typical 1.5 Ton AC consumes ~1.2 units per hour.
   const acUnitsPerMonth = acHours * daysPerMonth * 1.2;
   const totalUnits = baseUnits + acUnitsPerMonth;
@@ -53,7 +53,7 @@ function calculateLocalCarbon(data: {
 
   // Diet baseline values (Veg: low, Non-veg adds carbon per meal)
   let foodCO2 = 45;
-  const mealsPerWeek = Number(data.nonveg_meals) || 0;
+  const mealsPerWeek = Math.max(0, Number(data.nonveg_meals) || 0);
   if (data.diet_type === "non-veg") {
     foodCO2 += Math.round(mealsPerWeek * 4.3 * 2.2);
   }
@@ -263,12 +263,7 @@ app.post("/api/analyze", async (req, res) => {
 
   try {
     const ai = new GoogleGenAI({
-      apiKey: process.env.GEMINI_API_KEY,
-      httpOptions: {
-        headers: {
-          'User-Agent': "aistudio-build"
-        }
-      }
+      apiKey: process.env.GEMINI_API_KEY
     });
 
     const prompt = `You are an advanced AI Carbon Coach and Sustainability Analyst. Your task is to analyze user's lifestyle variables and return a highly personalized, practical carbon footprint analysis and reduction plan.
@@ -440,8 +435,7 @@ app.post("/api/chat", async (req, res) => {
 
   try {
     const ai = new GoogleGenAI({
-      apiKey: process.env.GEMINI_API_KEY,
-      httpOptions: { headers: { 'User-Agent': "aistudio-build" } }
+      apiKey: process.env.GEMINI_API_KEY
     });
 
     const chatHistory = Array.isArray(history) ? history.map((h: any) => ({

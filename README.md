@@ -179,10 +179,13 @@ This system helps users:
 
 ## 🧪 Testing Strategy
 
-* Input validation (empty, extreme, invalid cases)
-* Functional testing (correct calculations + AI outputs)
-* API failure handling (fallback to local engine)
-* UI consistency testing
+* **Automated Unit Tests**: Built with Node.js native test runner (`node:test`) and strict asserting library (`node:assert`) covering edge-cases, validation limits, Indian emission baseline equations, transit modes, and calculation clamping. Run the test suite natively via:
+  ```bash
+  npm test
+  ```
+* **Input sanitation & clamping**: Handled with `Math.max(0, ...)` limits across both client-side and server-side calculators.
+* **API failure handling**: Automatic local engine fallback when Gemini API is offline/not initialized.
+* **UI design system**: Accessibility checks ensuring focus actions and keyboard navigation logic.
 
 ---
 
@@ -245,12 +248,16 @@ This system helps users:
    ```bash
    npm install
    ```
-3. Set your `GEMINI_API_KEY` in your environment or a `.env` file.
-4. Launch the application in developer mode:
+3. Run the automated unit test suite to verify math:
+   ```bash
+   npm test
+   ```
+4. Set your `GEMINI_API_KEY` in your environment or a `.env` file.
+5. Launch the application in developer mode:
    ```bash
    npm run dev
    ```
-5. Open your local browser environment to port `3000` (e.g., `http://localhost:3000`).
+6. Open your local browser environment to port `3000` (e.g., `http://localhost:3000`).
 
 ---
 

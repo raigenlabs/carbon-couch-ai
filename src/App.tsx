@@ -230,7 +230,7 @@ export default function App() {
 
   // Instant interactive client estimation for real-time responsiveness
   const getClientEstimation = () => {
-    const dailyDist = Number(km) || 0;
+    const dailyDist = Math.max(0, Number(km) || 0);
     let transitF = 0.04;
     if (transportMode === "bike") transitF = 0.04;
     else if (transportMode === "car") transitF = 0.18;
@@ -239,13 +239,13 @@ export default function App() {
     else if (transportMode === "walk") transitF = 0;
     const estTransport = Math.round(dailyDist * 30 * transitF);
 
-    const baseUnits = Number(units) || 0;
-    const acUnits = (Number(acHours) || 0) * 30 * 1.2;
+    const baseUnits = Math.max(0, Number(units) || 0);
+    const acUnits = Math.max(0, Number(acHours) || 0) * 30 * 1.2;
     const estElectricity = Math.round((baseUnits + acUnits) * 0.82);
 
     let estFood = 45;
     if (dietType === "non-veg") {
-      estFood += Math.round((Number(nonvegMeals) || 0) * 4.3 * 2.2);
+      estFood += Math.round(Math.max(0, Number(nonvegMeals) || 0) * 4.3 * 2.2);
     }
 
     let estLifestyle = 30;
@@ -294,14 +294,14 @@ export default function App() {
           </div>
           <div className="flex gap-6 md:gap-8 flex-wrap">
             <div className="text-left">
-              <p className="text-[11px] text-[#b4b4b4] uppercase tracking-wider mb-1">Coaching Environment</p>
+              <p className="text-[11px] text-[#d4d4d8] uppercase tracking-wider mb-1">Coaching Environment</p>
               <p className="text-[14px] font-medium flex items-center gap-1.5 text-zinc-100">
                 <MapPin className="w-3.5 h-3.5 text-[#6ee7b7]" />
                 {location || "India"}
               </p>
             </div>
             <div className="text-left">
-              <p className="text-[11px] text-[#b4b4b4] uppercase tracking-wider mb-1">System State</p>
+              <p className="text-[11px] text-[#d4d4d8] uppercase tracking-wider mb-1">System State</p>
               <p className="text-[14px] font-medium flex items-center gap-1.5 text-[#6ee7b7]">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                 {apiStatus.aiActive ? "Gemini-Powered Engine" : "Eco-Calibrated Engine"}
@@ -321,7 +321,7 @@ export default function App() {
                   <Compass className="w-4 h-4 text-[#6ee7b7]" />
                   LIFESTYLE METRICS
                 </h2>
-                <div className="text-[11px] text-[#b4b4b4] bg-[#161616] px-2 py-0.5 rounded border border-white/5">
+                <div className="text-[11px] text-[#d4d4d8] bg-[#161616] px-2 py-0.5 rounded border border-white/5">
                   Live Calculator
                 </div>
               </div>
@@ -329,7 +329,7 @@ export default function App() {
               <div className="space-y-4">
                 {/* 1. Country / City */}
                 <div>
-                  <label htmlFor="location-input" className="block text-[11px] text-[#b4b4b4] uppercase tracking-wider mb-1.5">
+                  <label htmlFor="location-input" className="block text-[11px] text-[#d4d4d8] uppercase tracking-wider mb-1.5">
                     User Location (City/Country)
                   </label>
                   <div className="relative">
@@ -346,10 +346,10 @@ export default function App() {
 
                 {/* 2. Mode of Transport */}
                 <div>
-                  <span className="block text-[11px] text-[#b4b4b4] uppercase tracking-wider mb-1.5">
+                  <span className="block text-[11px] text-[#d4d4d8] uppercase tracking-wider mb-1.5" id="transit-mode-label">
                     Primary Transit Mode
                   </span>
-                  <div className="grid grid-cols-5 gap-1" role="radiogroup" aria-label="Transit Mode">
+                  <div className="grid grid-cols-5 gap-1" role="radiogroup" aria-labelledby="transit-mode-label">
                     {[
                       { id: "walk", label: "Walk", icon: Footprints },
                       { id: "bike", label: "Bike", icon: Bike },
@@ -364,10 +364,10 @@ export default function App() {
                           key={item.id}
                           type="button"
                           onClick={() => setTransportMode(item.id)}
-                          className={`flex flex-col items-center justify-center py-2.5 rounded-lg border text-center transition-all focus:outline-none focus:ring-1 ${
+                          className={`flex flex-col items-center justify-center py-2.5 rounded-lg border text-center transition-all focus:outline-none focus:ring-1 focus-visible:ring-2 focus-visible:ring-[#6ee7b7] ${
                             active
                               ? "bg-[#161616] border-[#6ee7b7] text-[#6ee7b7] shadow-[0_0_12px_rgba(110,231,183,0.15)]"
-                              : "bg-[#111] border-white/5 text-[#b4b4b4] hover:border-white/10"
+                              : "bg-[#111] border-white/5 text-[#d4d4d8] hover:border-white/10"
                           }`}
                           aria-checked={active}
                           role="radio"
@@ -383,7 +383,7 @@ export default function App() {
                 {/* 3. Daily travel distance */}
                 <div>
                   <div className="flex justify-between items-center mb-1">
-                    <label htmlFor="km-range" className="text-[11px] text-[#b4b4b4] uppercase tracking-wider">
+                    <label htmlFor="km-range" className="text-[11px] text-[#d4d4d8] uppercase tracking-wider">
                       Daily Commute Distance
                     </label>
                     <span className="font-mono text-xs text-[#6ee7b7] font-semibold bg-[#161616] px-1.5 py-0.5 rounded">
@@ -400,7 +400,7 @@ export default function App() {
                     value={km}
                     onChange={(e) => setKm(Number(e.target.value))}
                   />
-                  <div className="flex justify-between text-[9px] text-[#b4b4b4]/60 mt-0.5">
+                  <div className="flex justify-between text-[9px] text-[#d4d4d8]/60 mt-0.5">
                     <span>0 km</span>
                     <span>75 km</span>
                     <span>150 km</span>
@@ -410,7 +410,7 @@ export default function App() {
                 {/* 4. Electricity usage */}
                 <div>
                   <div className="flex justify-between items-center mb-1">
-                    <label htmlFor="units-range" className="text-[11px] text-[#b4b4b4] uppercase tracking-wider">
+                    <label htmlFor="units-range" className="text-[11px] text-[#d4d4d8] uppercase tracking-wider">
                       Electricity Units (Monthly)
                     </label>
                     <span className="font-mono text-xs text-[#6ee7b7] font-semibold bg-[#161616] px-1.5 py-0.5 rounded">
@@ -435,7 +435,7 @@ export default function App() {
                 {/* 5. AC Usage Hours */}
                 <div>
                   <div className="flex justify-between items-center mb-1">
-                    <label htmlFor="ac-range" className="text-[11px] text-[#b4b4b4] uppercase tracking-wider">
+                    <label htmlFor="ac-range" className="text-[11px] text-[#d4d4d8] uppercase tracking-wider">
                       Air Conditioner (Daily)
                     </label>
                     <span className="font-mono text-xs text-[#6ee7b7] font-semibold bg-[#161616] px-1.5 py-0.5 rounded">
@@ -451,37 +451,43 @@ export default function App() {
                     value={acHours}
                     onChange={(e) => setAcHours(Number(e.target.value))}
                   />
-                  <div className="flex justify-between text-[9px] text-[#b4b4b4]/60 mt-0.5">
+                  <div className="flex justify-between text-[9px] text-[#d4d4d8]/60 mt-0.5">
                     <span>0 h</span>
-                    <span>12 h</span>
-                    <span>24 h</span>
+                    <span>12.5 h</span>
+                    <span>25 h</span>
                   </div>
                 </div>
 
                 {/* 6. Diet Preferences */}
                 <div>
-                  <label htmlFor="diet-select" className="block text-[11px] text-[#b4b4b4] uppercase tracking-wider mb-1.5">
+                  <span className="block text-[11px] text-[#d4d4d8] uppercase tracking-wider mb-1.5" id="diet-preference-label">
                     Primary Diet Type
-                  </label>
-                  <div className="grid grid-cols-2 gap-2" role="group">
+                  </span>
+                  <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-labelledby="diet-preference-label">
                     <button
                       type="button"
+                      id="diet-veg-btn"
                       onClick={() => setDietType("veg")}
-                      className={`py-2 px-3 rounded-lg border text-xs font-semibold focus:outline-none ${
+                      aria-checked={dietType === "veg"}
+                      role="radio"
+                      className={`py-2 px-3 rounded-lg border text-xs font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-[#6ee7b7] ${
                         dietType === "veg"
                           ? "bg-emerald-950/20 text-[#6ee7b7] border-[#6ee7b7] shadow-sm"
-                          : "bg-[#111] text-[#b4b4b4] border-white/5 hover:bg-[#161616]"
+                          : "bg-[#111] text-[#d4d4d8] border-white/5 hover:bg-[#161616]"
                       }`}
                     >
                       🌱 Vegetarian
                     </button>
                     <button
                       type="button"
+                      id="diet-nonveg-btn"
                       onClick={() => setDietType("non-veg")}
-                      className={`py-2 px-3 rounded-lg border text-xs font-semibold focus:outline-none ${
+                      aria-checked={dietType === "non-veg"}
+                      role="radio"
+                      className={`py-2 px-3 rounded-lg border text-xs font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-[#6ee7b7] ${
                         dietType === "non-veg"
                           ? "bg-rose-950/20 text-rose-300 border-rose-500/50 shadow-sm"
-                          : "bg-[#111] text-[#b4b4b4] border-white/5 hover:bg-[#161616]"
+                          : "bg-[#111] text-[#d4d4d8] border-white/5 hover:bg-[#161616]"
                       }`}
                     >
                       🍗 Non-Vegetarian
@@ -493,7 +499,7 @@ export default function App() {
                 {dietType === "non-veg" && (
                   <div className="animate-fade-in">
                     <div className="flex justify-between items-center mb-1">
-                      <label htmlFor="nonveg-range" className="text-[11px] text-[#b4b4b4] uppercase tracking-wider">
+                      <label htmlFor="nonveg-range" className="text-[11px] text-[#d4d4d8] uppercase tracking-wider">
                         Non-Veg Meals per Week
                       </label>
                       <span className="font-mono text-xs text-rose-300 font-semibold bg-[#161616] px-1.5 py-0.5 rounded">
@@ -514,10 +520,10 @@ export default function App() {
 
                 {/* 8. Shopping tier */}
                 <div>
-                  <span className="block text-[11px] text-[#b4b4b4] uppercase tracking-wider mb-1.5">
+                  <span className="block text-[11px] text-[#d4d4d8] uppercase tracking-wider mb-1.5" id="shopping-behavior-label">
                     Shopping Buy Behavior
                   </span>
-                  <div className="grid grid-cols-3 gap-1.5" role="group">
+                  <div className="grid grid-cols-3 gap-1.5" role="radiogroup" aria-labelledby="shopping-behavior-label">
                     {[
                       { id: "low", label: "Minimalist", desc: "Buy only essentials" },
                       { id: "medium", label: "Moderate", desc: "Subtle online retail" },
@@ -529,10 +535,12 @@ export default function App() {
                           key={item.id}
                           type="button"
                           onClick={() => setShoppingLevel(item.id)}
-                          className={`py-2 px-1 text-center rounded-lg border transition-all text-xs focus:ring-1 focus:outline-none ${
+                          aria-checked={active}
+                          role="radio"
+                          className={`py-2 px-1 text-center rounded-lg border transition-all text-xs focus:ring-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#6ee7b7] ${
                             active
                               ? "bg-[#161616] border-[#6ee7b7] text-[#6ee7b7]"
-                              : "bg-[#111] border-white/5 text-[#b4b4b4] hover:bg-[#161616]"
+                              : "bg-[#111] border-white/5 text-[#d4d4d8] hover:bg-[#161616]"
                           }`}
                           title={item.desc}
                         >
@@ -635,7 +643,7 @@ export default function App() {
                       style={{ width: `${Math.min(100, (simulatedRemaining / 500) * 100)}%` }}
                     ></div>
                   </div>
-                  <div className="flex justify-between w-full mt-2 text-[10px] text-[#b4b4b4] font-mono">
+                  <div className="flex justify-between w-full mt-2 text-[10px] text-[#d4d4d8] font-mono">
                     <span>0 kg</span>
                     <span className="relative font-bold text-amber-500">
                       Target Ceiling: {targetThreshold} kg
@@ -763,20 +771,33 @@ export default function App() {
                 )}
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-3" role="group" aria-label="Personalized Carbon Reduction Actions">
                 {(analysis?.recommendations || []).map((rec, index) => {
                   const isCommitted = !!committedActions[index];
                   const diff = (rec.difficulty || "easy").toLowerCase();
                   return (
                     <div
                       key={index}
+                      tabIndex={0}
+                      role="checkbox"
+                      aria-checked={isCommitted}
+                      aria-label={`${rec.action}. Difficulty: ${diff}. Reduces ${rec.co2_reduction} kilograms of carbon.`}
                       onClick={() => {
                         setCommittedActions(prev => ({
                           ...prev,
                           [index]: !prev[index]
                         }));
                       }}
-                      className={`relative p-3.5 rounded-xl border transition-all cursor-pointer select-none flex flex-col justify-between gap-3 ${
+                      onKeyDown={(e) => {
+                        if (e.key === " " || e.key === "Enter") {
+                          e.preventDefault();
+                          setCommittedActions(prev => ({
+                            ...prev,
+                            [index]: !prev[index]
+                          }));
+                        }
+                      }}
+                      className={`relative p-3.5 rounded-xl border transition-all cursor-pointer select-none flex flex-col justify-between gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#6ee7b7] ${
                         isCommitted
                           ? "bg-emerald-950/20 border-[#6ee7b7]/60 shadow-[inset_0_1px_8px_rgba(110,231,183,0.1)]"
                           : "bg-[#161616] border-[#222] hover:border-zinc-700 hover:bg-[#1a1a1a]"
@@ -806,7 +827,7 @@ export default function App() {
 
                       <div className="flex items-center gap-1 mt-auto">
                         <TrendingDown className="w-3.5 h-3.5 text-[#6ee7b7]" />
-                        <span className="text-[11px] font-mono text-[#b4b4b4] font-semibold">
+                        <span className="text-[11px] font-mono text-[#d4d4d8] font-semibold">
                           -{rec.co2_reduction} kg CO₂
                         </span>
                       </div>
