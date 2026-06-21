@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { calculateLocalCarbon } from "./utils/carbonMath";
 import {
   Leaf,
   Zap,
@@ -230,35 +231,22 @@ export default function App() {
 
   // Instant interactive client estimation for real-time responsiveness
   const getClientEstimation = () => {
-    const dailyDist = Math.max(0, Number(km) || 0);
-    let transitF = 0.04;
-    if (transportMode === "bike") transitF = 0.04;
-    else if (transportMode === "car") transitF = 0.18;
-    else if (transportMode === "bus") transitF = 0.03;
-    else if (transportMode === "metro") transitF = 0.015;
-    else if (transportMode === "walk") transitF = 0;
-    const estTransport = Math.round(dailyDist * 30 * transitF);
-
-    const baseUnits = Math.max(0, Number(units) || 0);
-    const acUnits = Math.max(0, Number(acHours) || 0) * 30 * 1.2;
-    const estElectricity = Math.round((baseUnits + acUnits) * 0.82);
-
-    let estFood = 45;
-    if (dietType === "non-veg") {
-      estFood += Math.round(Math.max(0, Number(nonvegMeals) || 0) * 4.3 * 2.2);
-    }
-
-    let estLifestyle = 30;
-    if (shoppingLevel === "medium") estLifestyle = 75;
-    else if (shoppingLevel === "high") estLifestyle = 160;
-
-    const total = estTransport + estElectricity + estFood + estLifestyle;
+    const rawResult = calculateLocalCarbon({
+      km,
+      transport_mode: transportMode,
+      units,
+      ac_hours: acHours,
+      diet_type: dietType,
+      nonveg_meals: nonvegMeals,
+      shopping_level: shoppingLevel,
+      location
+    });
     return {
-      total,
-      transport: estTransport,
-      electricity: estElectricity,
-      food: estFood,
-      lifestyle: estLifestyle
+      total: Number(rawResult.carbon_footprint.total),
+      transport: Number(rawResult.carbon_footprint.breakdown.transport),
+      electricity: Number(rawResult.carbon_footprint.breakdown.electricity),
+      food: Number(rawResult.carbon_footprint.breakdown.food),
+      lifestyle: Number(rawResult.carbon_footprint.breakdown.lifestyle)
     };
   };
 
